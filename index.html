@@ -146,6 +146,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .bub.ai th{background:var(--surf);font-weight:600}
 .bub.ai hr{border:none;border-top:1px solid var(--bdr);margin:10px 0}
 .bub.ai del{text-decoration:line-through;opacity:.65}
+.cp-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;background:none;border:1px solid var(--bdr);border-radius:7px;padding:4px 9px;font-size:.7rem;color:var(--faint);cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .2s}
+.cp-btn:hover{background:var(--surf);color:var(--char);border-color:var(--clay)}
+.cp-btn.copied{background:rgba(92,158,107,.1);border-color:rgba(92,158,107,.4);color:#3a7a48}
 
 /* Image skeleton */
 .skel{width:280px;height:196px;background:linear-gradient(90deg,var(--surf) 25%,var(--sand) 50%,var(--surf) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-family:'DM Mono',monospace;color:var(--faint)}
@@ -553,6 +556,26 @@ function addBub(role, content, atts = []) {
   const txt = document.createElement('div');
   if (role === 'ai') txt.innerHTML = md(content); else txt.textContent = content;
   bub.appendChild(txt);
+
+  // Copy button for AI responses
+  if (role === 'ai') {
+    const cpBtn = document.createElement('button');
+    cpBtn.className = 'cp-btn';
+    cpBtn.title = 'Copy response';
+    cpBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Copy`;
+    cpBtn.onclick = () => {
+      navigator.clipboard.writeText(content).then(() => {
+        cpBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!`;
+        cpBtn.classList.add('copied');
+        setTimeout(() => {
+          cpBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Copy`;
+          cpBtn.classList.remove('copied');
+        }, 2000);
+      });
+    };
+    bub.appendChild(cpBtn);
+  }
+
   row.appendChild(av); row.appendChild(bub);
   msgsEl().appendChild(row);
   msgsEl().scrollTop = msgsEl().scrollHeight;
