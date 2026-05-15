@@ -18,10 +18,10 @@
 html,body{height:100%;background:var(--cream);color:var(--char);font-family:'Instrument Sans',sans-serif;font-size:15px;line-height:1.65;overflow:hidden}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.45;
   background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
-
+ 
 /* ── SHELL ── */
 #shell{display:flex;height:100vh;overflow:hidden;position:relative}
-
+ 
 /* ── SIDEBAR ── */
 #sb{
   width:var(--sb);flex-shrink:0;
@@ -31,7 +31,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 }
 /* Desktop closed: shrink to 0 */
 #sb.sb-closed{width:0;border-right-color:transparent}
-
+ 
 /* Mobile: absolute overlay, slide on/off screen */
 @media(max-width:700px){
   #sb{
@@ -45,7 +45,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   #backdrop{display:none;position:absolute;inset:0;z-index:199;background:rgba(42,37,32,.35)}
   #backdrop.show{display:block}
 }
-
+ 
 .sb-hd{padding:14px 13px 10px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .sb-ttl{font-family:'Fraunces',serif;font-weight:300;font-size:.86rem;color:var(--mid);white-space:nowrap}
 .new-btn{display:flex;align-items:center;gap:5px;background:var(--char);color:var(--cream);border:none;border-radius:8px;padding:5px 10px;font-size:.71rem;font-family:'Instrument Sans',sans-serif;cursor:pointer;transition:background .2s;white-space:nowrap}
@@ -69,10 +69,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .sb-ft{padding:9px 11px;border-top:1px solid var(--bdr);flex-shrink:0}
 .sb-info{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);text-align:center}
 .no-chats{text-align:center;padding:26px 14px;color:var(--faint);font-size:.76rem;line-height:1.6}
-
+ 
 /* ── MAIN ── */
 #main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-
+ 
 /* ── HEADER ── */
 header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--bdr);background:rgba(245,240,232,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);flex-shrink:0;z-index:10;gap:10px}
 .h-l{display:flex;align-items:center;gap:8px}
@@ -90,12 +90,12 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .key-in{font-family:'DM Mono',monospace;font-size:.67rem;background:var(--surf);border:1px solid var(--bdr);border-radius:9px;padding:5px 10px;color:var(--char);width:188px;outline:none;transition:border-color .2s,box-shadow .2s}
 .key-in:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--glow)}
 .key-in::placeholder{color:var(--faint)}
-
+ 
 /* ── MESSAGES ── */
 #msgs{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;scroll-behavior:smooth}
 #msgs::-webkit-scrollbar{width:4px}
 #msgs::-webkit-scrollbar-thumb{background:var(--sand);border-radius:4px}
-
+ 
 .welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 20px;gap:12px;animation:fadeUp .6s ease both}
 .w-orb{width:62px;height:62px;background:linear-gradient(135deg,var(--clay) 0%,var(--rust) 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;box-shadow:0 8px 22px rgba(181,98,42,.22)}
 .welcome h1{font-family:'Fraunces',serif;font-weight:300;font-size:1.75rem;letter-spacing:-.03em;line-height:1.2}
@@ -103,7 +103,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
 .chip{background:var(--surf);border:1px solid var(--bdr);border-radius:100px;padding:5px 12px;font-size:.75rem;color:var(--mid);cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif}
 .chip:hover{background:var(--sand);color:var(--char);border-color:var(--clay);transform:translateY(-1px)}
-
+ 
 .row{display:flex;gap:10px;animation:fadeUp .25s ease both;margin-bottom:14px}
 .row.u{flex-direction:row-reverse}
 .av{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:.6rem;font-family:'DM Mono',monospace}
@@ -112,7 +112,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .bub{max-width:75%;padding:11px 15px;border-radius:20px;font-size:.875rem;line-height:1.72}
 .bub.ai{background:var(--warm);border:1px solid var(--bdr);border-bottom-left-radius:5px;color:var(--char)}
 .bub.u{background:var(--char);color:var(--cream);border-bottom-right-radius:5px}
-
+ 
 /* Generated image */
 .gen-wrap{margin:4px 0 5px}
 .gen-wrap img{max-width:100%;border-radius:12px;display:block;border:1px solid var(--bdr);cursor:zoom-in;transition:transform .2s,box-shadow .2s}
@@ -120,12 +120,12 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .gen-cap{font-size:.71rem;color:var(--faint);margin-top:5px;font-family:'DM Mono',monospace;font-style:italic}
 .dl-btn{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:5px 10px;font-size:.72rem;color:var(--mid);cursor:pointer;font-family:'Instrument Sans',sans-serif;text-decoration:none;transition:all .2s}
 .dl-btn:hover{background:var(--sand);color:var(--char);border-color:var(--clay)}
-
+ 
 /* Attached file previews in user bubble */
 .ap{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:7px 10px;margin-bottom:7px;font-size:.75rem;color:rgba(245,240,232,.8)}
 .ap.img{flex-direction:column;align-items:flex-start;padding:0;background:none;border:none;margin-bottom:9px}
 .ap.img img{max-width:220px;max-height:170px;border-radius:10px;object-fit:cover;border:1px solid var(--bdr)}
-
+ 
 /* Markdown */
 .bub.ai strong{color:var(--rust);font-weight:600}
 .bub.ai em{font-style:italic;color:var(--mid)}
@@ -149,17 +149,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .cp-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;background:none;border:1px solid var(--bdr);border-radius:7px;padding:4px 9px;font-size:.7rem;color:var(--faint);cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .2s}
 .cp-btn:hover{background:var(--surf);color:var(--char);border-color:var(--clay)}
 .cp-btn.copied{background:rgba(92,158,107,.1);border-color:rgba(92,158,107,.4);color:#3a7a48}
-
+ 
 /* Image skeleton */
 .skel{width:280px;height:196px;background:linear-gradient(90deg,var(--surf) 25%,var(--sand) 50%,var(--surf) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-family:'DM Mono',monospace;color:var(--faint)}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
+ 
 /* Typing */
 .typing{display:flex;align-items:center;gap:4px;padding:12px 16px;background:var(--warm);border:1px solid var(--bdr);border-radius:20px;border-bottom-left-radius:5px;width:fit-content}
 .d{width:6px;height:6px;background:var(--clay);border-radius:50%;animation:bop 1.2s ease infinite}
 .d:nth-child(2){animation-delay:.2s}.d:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-
+ 
 /* ── INPUT ── */
 .inp-area{padding:10px 20px 16px;border-top:1px solid var(--bdr);background:rgba(245,240,232,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);flex-shrink:0}
 #strip{display:none;flex-wrap:wrap;gap:6px;margin-bottom:7px}
@@ -185,17 +185,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .img-hint.show{display:block}
 .clr{font-size:.67rem;color:var(--faint);background:none;border:none;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:color .2s}
 .clr:hover{color:var(--rust)}
-
+ 
 /* Lightbox */
 #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
 #lb.show{display:flex}
 #lb img{max-width:92vw;max-height:92vh;border-radius:14px;object-fit:contain}
-
+ 
 /* Toast */
 .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:10px;font-size:.77rem;z-index:9998;animation:sup .3s ease,fout .3s ease 3.7s both;max-width:320px;text-align:center;line-height:1.4}
 .toast.err{background:#3D1A0E;color:#F5D5C0}
 .toast.ok{background:#0E3D1A;color:#C0F5D0}
-
+ 
 #fin{display:none}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sup{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
@@ -203,14 +203,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 </style>
 </head>
 <body>
-
+ 
 <!-- Lightbox -->
 <div id="lb" onclick="closeLb()"><img id="lbImg" src="" alt=""/></div>
-
+ 
 <div id="shell">
   <!-- Mobile backdrop — clicking closes sidebar -->
   <div id="backdrop" onclick="closeSb()"></div>
-
+ 
   <!-- ── SIDEBAR ── -->
   <aside id="sb">
     <div class="sb-hd">
@@ -224,7 +224,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
     <div id="chatList"></div>
     <div class="sb-ft"><div class="sb-info" id="sbInfo">Chats saved locally</div></div>
   </aside>
-
+ 
   <!-- ── MAIN ── -->
   <div id="main">
     <header>
@@ -248,9 +248,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
         <input type="password" class="key-in" id="key" placeholder="Groq API key…" autocomplete="off"/>
       </div>
     </header>
-
+ 
     <div id="msgs"></div>
-
+ 
     <div class="inp-area">
       <div id="strip"></div>
       <div class="inp-wrap">
@@ -279,9 +279,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
     </div>
   </div>
 </div>
-
+ 
 <input type="file" id="fin" accept="image/*,.txt,.md,.csv,.json,.js,.ts,.jsx,.tsx,.py,.html,.css,.xml,.yaml,.yml" multiple onchange="handleFiles(event)"/>
-
+ 
 <script>
 // ── CONFIG ──
 const CHAT_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -290,9 +290,9 @@ const CHAT_M   = 'llama-3.1-8b-instant';
 const IMG_M    = 'black-forest-labs/FLUX.1-schnell'; // Groq image gen model
 const SK       = 'cloneV4_chats';
 const AK       = 'cloneV4_active';
-
+ 
 const SYS = `You are Claude, a helpful, harmless, and honest AI assistant made by Anthropic. You are warm, thoughtful, and give clear nuanced responses. Adapt your tone — casual when casual, precise when technical. Acknowledge uncertainty rather than fabricating. Use markdown formatting where it helps.`;
-
+ 
 // ── STATE ──
 let chats    = {};
 let activeId = null;
@@ -300,7 +300,7 @@ let busy     = false;
 let pending  = [];   // pending file attachments
 let imgMode  = false;
 let sbOpen   = true; // sidebar open state (desktop) / used as toggle tracker (mobile)
-
+ 
 // ── DOM shortcuts ──
 const msgsEl  = () => document.getElementById('msgs');
 const inputEl = () => document.getElementById('tin');
@@ -311,7 +311,7 @@ const stripEl = () => document.getElementById('strip');
 const listEl  = () => document.getElementById('chatList');
 const sbEl    = () => document.getElementById('sb');
 const bdEl    = () => document.getElementById('backdrop');
-
+ 
 // ── BOOT ──
 (function boot() {
   const k = localStorage.getItem('groq_api_key');
@@ -323,12 +323,12 @@ const bdEl    = () => document.getElementById('backdrop');
   renderList();
   updateSnd();
 })();
-
+ 
 // ─────────────────────────────────────────────────
 // SIDEBAR — completely rewritten, no class confusion
 // ─────────────────────────────────────────────────
 function isMob() { return window.innerWidth <= 700; }
-
+ 
 function toggleSb() {
   if (isMob()) {
     // Mobile: use .sb-open class for slide-in
@@ -341,18 +341,18 @@ function toggleSb() {
     sbEl().classList.toggle('sb-closed', !sbOpen);
   }
 }
-
+ 
 function openSb() {
   sbEl().classList.add('sb-open');
   sbEl().classList.remove('sb-closed');
   bdEl().classList.add('show');
 }
-
+ 
 function closeSb() {
   sbEl().classList.remove('sb-open');
   bdEl().classList.remove('show');
 }
-
+ 
 // Handle resize: clean up leftover classes when crossing breakpoint
 window.addEventListener('resize', () => {
   if (!isMob()) {
@@ -366,7 +366,7 @@ window.addEventListener('resize', () => {
     sbEl().classList.remove('sb-closed');
   }
 });
-
+ 
 // ── IMAGE MODE TOGGLE ──
 function toggleImg() {
   imgMode = !imgMode;
@@ -378,14 +378,14 @@ function toggleImg() {
   inputEl().placeholder = imgMode ? 'Describe an image to generate…' : 'Message Claude…';
   inputEl().focus();
 }
-
+ 
 function setImgAndFill(prompt) {
   if (!imgMode) toggleImg();
   inputEl().value = prompt;
   inputEl().dispatchEvent(new Event('input'));
   inputEl().focus();
 }
-
+ 
 // ── PERSIST ──
 function save() {
   try {
@@ -395,7 +395,7 @@ function save() {
   const raw = localStorage.getItem(SK) || '';
   document.getElementById('sbInfo').textContent = (new Blob([raw]).size / 1024).toFixed(1) + ' KB saved locally';
 }
-
+ 
 // ── CHAT OPS ──
 function newChat() {
   const id = 'c' + Date.now();
@@ -404,13 +404,13 @@ function newChat() {
   save(); renderList(); showWelcome(); inputEl().focus();
   if (isMob()) closeSb();
 }
-
+ 
 function switchChat(id) {
   activeId = id;
   save(); renderMsgs(); renderList();
   if (isMob()) closeSb();
 }
-
+ 
 function deleteChat(id, e) {
   e.stopPropagation();
   if (!confirm('Delete this conversation?')) return;
@@ -422,18 +422,18 @@ function deleteChat(id, e) {
   save(); renderList();
   if (activeId) renderMsgs(); else showWelcome();
 }
-
+ 
 function clearChat() {
   if (!activeId || !chats[activeId]) return;
   if (!confirm('Clear this conversation?')) return;
   chats[activeId].msgs = []; chats[activeId].title = 'New conversation';
   save(); renderList(); showWelcome();
 }
-
+ 
 function autoTitle(id, txt) {
   chats[id].title = txt.replace(/^[^a-z0-9]/i,'').slice(0, 46) + (txt.length > 46 ? '…' : '');
 }
-
+ 
 // ── RENDER SIDEBAR ──
 function renderList() {
   const q = (document.getElementById('srch')?.value || '').toLowerCase();
@@ -470,7 +470,7 @@ function renderList() {
   const raw = localStorage.getItem(SK) || '';
   document.getElementById('sbInfo').textContent = (new Blob([raw]).size / 1024).toFixed(1) + ' KB saved locally';
 }
-
+ 
 // ── WELCOME ──
 function showWelcome() {
   msgsEl().innerHTML = `<div class="welcome">
@@ -486,7 +486,7 @@ function showWelcome() {
     </div>
   </div>`;
 }
-
+ 
 // ── RENDER SAVED MESSAGES ──
 function renderMsgs() {
   if (!activeId || !chats[activeId] || !chats[activeId].msgs.length) { showWelcome(); return; }
@@ -500,7 +500,7 @@ function renderMsgs() {
     }
   });
 }
-
+ 
 // ── FILE HANDLING ──
 function handleFiles(e) {
   Array.from(e.target.files).forEach(f => {
@@ -523,7 +523,7 @@ function handleFiles(e) {
   });
   e.target.value = '';
 }
-
+ 
 function renderStrip() {
   const el = stripEl();
   if (!pending.length) { el.className = ''; el.innerHTML = ''; return; }
@@ -536,27 +536,27 @@ function renderStrip() {
   });
 }
 function rmAtt(i) { pending.splice(i, 1); renderStrip(); updateSnd(); }
-
+ 
 // ── DOM: ADD BUBBLE ──
 const AI_AV = `<svg viewBox="0 0 24 24" fill="none" width="13" height="13"><path d="M12 4C8.13 4 5 7.13 5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11" stroke="#F5F0E8" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="11" r="2" fill="#C4A882"/></svg>`;
-
+ 
 function addBub(role, content, atts = []) {
   const row = document.createElement('div'); row.className = `row ${role}`;
   const av = document.createElement('div'); av.className = `av ${role}`;
   if (role === 'ai') av.innerHTML = AI_AV; else av.textContent = 'you';
   const bub = document.createElement('div'); bub.className = `bub ${role}`;
-
+ 
   (atts || []).forEach(a => {
     const p = document.createElement('div');
     if (a.kind === 'img' && a.dataUrl) { p.className = 'ap img'; p.innerHTML = `<img src="${a.dataUrl}" alt="${esc(a.name)}"/>`; }
     else { p.className = 'ap'; p.innerHTML = `<span>📄</span><span>${esc(a.name)}</span>`; }
     bub.appendChild(p);
   });
-
+ 
   const txt = document.createElement('div');
   if (role === 'ai') txt.innerHTML = md(content); else txt.textContent = content;
   bub.appendChild(txt);
-
+ 
   // Copy button for AI responses
   if (role === 'ai') {
     const cpBtn = document.createElement('button');
@@ -575,18 +575,18 @@ function addBub(role, content, atts = []) {
     };
     bub.appendChild(cpBtn);
   }
-
+ 
   row.appendChild(av); row.appendChild(bub);
   msgsEl().appendChild(row);
   msgsEl().scrollTop = msgsEl().scrollHeight;
   return row;
 }
-
+ 
 function addImgBub(imgUrl, prompt, loading = false) {
   const row = document.createElement('div'); row.className = 'row ai'; row.id = 'imgRow';
   const av = document.createElement('div'); av.className = 'av ai'; av.innerHTML = AI_AV;
   const bub = document.createElement('div'); bub.className = 'bub ai';
-
+ 
   if (loading) {
     const sk = document.createElement('div'); sk.className = 'skel'; sk.textContent = 'Generating image…';
     bub.appendChild(sk);
@@ -606,7 +606,7 @@ function addImgBub(imgUrl, prompt, loading = false) {
   msgsEl().scrollTop = msgsEl().scrollHeight;
   return row;
 }
-
+ 
 function showTyping() {
   const row = document.createElement('div'); row.className = 'row ai'; row.id = 'typr';
   const av = document.createElement('div'); av.className = 'av ai'; av.innerHTML = AI_AV;
@@ -616,17 +616,17 @@ function showTyping() {
   msgsEl().scrollTop = msgsEl().scrollHeight;
 }
 function rmTyping() { document.getElementById('typr')?.remove(); }
-
+ 
 // Lightbox
 function openLb(src) { document.getElementById('lbImg').src = src; document.getElementById('lb').classList.add('show'); }
 function closeLb() { document.getElementById('lb').classList.remove('show'); }
-
+ 
 // ── SEND ──
 async function send() {
   const txt = inputEl().value.trim();
   const key = keyEl().value.trim();
   if ((!txt && !pending.length) || !key || busy) return;
-
+ 
   if (!activeId || !chats[activeId]) {
     const id = 'c' + Date.now();
     chats[id] = { id, title: 'New conversation', ts: Date.now(), msgs: [] };
@@ -634,13 +634,13 @@ async function send() {
   }
   const chat = chats[activeId];
   const atts = [...pending];
-
+ 
   busy = true; sndEl().disabled = true; dotEl().className = 'dot spin';
   inputEl().value = ''; inputEl().style.height = 'auto';
   pending = []; renderStrip();
-
+ 
   const w = msgsEl().querySelector('.welcome'); if (w) w.remove();
-
+ 
   // ── IMAGE GENERATION ──
   if (imgMode) {
     if (!txt) { busy = false; updateSnd(); dotEl().className = key ? 'dot on' : 'dot'; return; }
@@ -648,7 +648,7 @@ async function send() {
     if (chat.msgs.length === 0) autoTitle(activeId, '🎨 ' + txt);
     const skelRow = addImgBub(null, txt, true);
     save(); renderList();
-
+ 
     try {
       const res = await fetch(IMG_URL, {
         method: 'POST',
@@ -676,7 +676,7 @@ async function send() {
     }
     return;
   }
-
+ 
   // ── CHAT MODE ──
   const display = txt || (atts.length ? `[Attached: ${atts.map(a => a.name).join(', ')}]` : '');
   let apiContent;
@@ -688,17 +688,17 @@ async function send() {
     });
     if (txt) apiContent.push({ type: 'text', text: txt });
   } else { apiContent = txt; }
-
+ 
   const storedAtts = atts.map(a => ({ name: a.name, kind: a.kind, dataUrl: a.dataUrl || null }));
   if (chat.msgs.length === 0) autoTitle(activeId, txt);
   chat.msgs.push({ role: 'user', content: apiContent, display, atts: storedAtts, ts: Date.now() });
   addBub('user', display, storedAtts);
   showTyping(); save(); renderList();
-
+ 
   const history = chat.msgs
     .filter(m => m.type !== 'genimg')
     .map(m => ({ role: m.role === 'ai' ? 'assistant' : m.role, content: m.content }));
-
+ 
   try {
     const res = await fetch(CHAT_URL, {
       method: 'POST',
@@ -719,7 +719,7 @@ async function send() {
     busy = false; dotEl().className = key ? 'dot on' : 'dot'; updateSnd();
   }
 }
-
+ 
 // ── HELPERS ──
 function updateSnd() { sndEl().disabled = (inputEl().value.trim() === '' && pending.length === 0) || !keyEl().value.trim() || busy; }
 function fillP(t) { inputEl().value = t; inputEl().dispatchEvent(new Event('input')); inputEl().focus(); }
@@ -729,7 +729,7 @@ function showToast(msg, type='err') {
   const t = document.createElement('div'); t.className = `toast ${type}`; t.textContent = msg;
   document.body.appendChild(t); setTimeout(() => t.remove(), 4300);
 }
-
+ 
 // ── EVENTS ──
 document.getElementById('key').addEventListener('input', e => {
   const v = e.target.value.trim();
@@ -754,7 +754,7 @@ document.querySelector('.inp-area').addEventListener('drop', e => {
   const f = Array.from(e.dataTransfer.files); if (!f.length) return;
   handleFiles({ target: { files: f, value: '' } });
 });
-
+ 
 // ── MARKDOWN ──
 function md(text) {
   let h = text;
