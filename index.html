@@ -238,7 +238,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
           </svg>
         </div>
         <span class="brand">Claude</span>
-        <span class="badge" id="badge">chat · llama-3.3-70b</span>
+        <span class="badge" id="badge">chat · llama-3.1-8b</span>
       </div>
       <div class="h-r">
         <div class="dot" id="dot"></div>
@@ -283,7 +283,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 // ── CONFIG ──
 const CHAT_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const IMG_URL  = 'https://api.groq.com/openai/v1/images/generations';
-const CHAT_M   = 'llama-3.3-70b-versatile';
+const CHAT_M   = 'llama-3.1-8b-instant';
 const IMG_M    = 'black-forest-labs/FLUX.1-schnell'; // Groq image gen model
 const SK       = 'cloneV4_chats';
 const AK       = 'cloneV4_active';
@@ -369,7 +369,7 @@ function toggleImg() {
   imgMode = !imgMode;
   document.getElementById('imgBtn').classList.toggle('on', imgMode);
   document.getElementById('badge').className = 'badge' + (imgMode ? ' img-mode' : '');
-  document.getElementById('badge').textContent = imgMode ? 'image gen · FLUX.1-schnell' : 'chat · llama-3.3-70b';
+  document.getElementById('badge').textContent = imgMode ? 'image gen · FLUX.1-schnell' : 'chat · llama-3.1-8b';
   document.getElementById('ht').style.display = imgMode ? 'none' : '';
   document.getElementById('iht').classList.toggle('show', imgMode);
   inputEl().placeholder = imgMode ? 'Describe an image to generate…' : 'Message Claude…';
