@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Claude — AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=DM+Mono:wght@300;400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;--warm:#FAFAF7;--sand:#E8E0D0;--clay:#C4A882;
+  --rust:#B5622A;--char:#2A2520;--mid:#6B5E52;--faint:#9B8E82;
+  --surf:#EFEBE2;--bdr:rgba(180,160,130,0.25);--glow:rgba(181,98,42,0.09);
+  --sb:260px;
+}
+html,body{height:100%;background:var(--cream);color:var(--char);font-family:'Instrument Sans',sans-serif;font-size:15px;line-height:1.65;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.45;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
+
+/* ── SHELL ── */
+#shell{display:flex;height:100vh;overflow:hidden;position:relative}
+
+/* ── SIDEBAR ── */
+#sb{
+  width:var(--sb);flex-shrink:0;
+  background:var(--surf);border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:width .28s cubic-bezier(.4,0,.2,1),border-color .28s;
+}
+/* Desktop closed: shrink to 0 */
+#sb.sb-closed{width:0;border-right-color:transparent}
+
+/* Mobile: absolute overlay, slide on/off screen */
+@media(max-width:700px){
+  #sb{
+    position:absolute;left:0;top:0;height:100%;z-index:200;
+    width:var(--sb)!important;/* always full width */
+    border-right:1px solid var(--bdr)!important;
+    transform:translateX(calc(-1 * var(--sb)));
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+  }
+  #sb.sb-open{transform:translateX(0);box-shadow:8px 0 32px rgba(0,0,0,.18)}
+  #backdrop{display:none;position:absolute;inset:0;z-index:199;background:rgba(42,37,32,.35)}
+  #backdrop.show{display:block}
+}
+
+.sb-hd{padding:14px 13px 10px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sb-ttl{font-family:'Fraunces',serif;font-weight:300;font-size:.86rem;color:var(--mid);white-space:nowrap}
+.new-btn{display:flex;align-items:center;gap:5px;background:var(--char);color:var(--cream);border:none;border-radius:8px;padding:5px 10px;font-size:.71rem;font-family:'Instrument Sans',sans-serif;cursor:pointer;transition:background .2s;white-space:nowrap}
+.new-btn:hover{background:var(--rust)}
+.sb-srch{padding:8px 10px;flex-shrink:0}
+.sb-srch input{width:100%;background:var(--warm);border:1px solid var(--bdr);border-radius:8px;padding:6px 10px;font-size:.76rem;font-family:'Instrument Sans',sans-serif;color:var(--char);outline:none}
+.sb-srch input::placeholder{color:var(--faint)}
+.sb-srch input:focus{border-color:var(--clay)}
+#chatList{flex:1;overflow-y:auto;padding:4px 7px 10px}
+#chatList::-webkit-scrollbar{width:3px}
+#chatList::-webkit-scrollbar-thumb{background:var(--sand);border-radius:4px}
+.grp-lbl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;padding:9px 8px 3px}
+.ci{display:flex;align-items:center;padding:7px 9px;border-radius:9px;cursor:pointer;transition:background .15s;gap:5px;border:1px solid transparent}
+.ci:hover{background:var(--sand)}
+.ci.act{background:var(--sand);border-color:var(--bdr)}
+.ci-t{font-size:.78rem;color:var(--char);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.ci-d{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint);flex-shrink:0}
+.ci-x{opacity:0;background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9rem;padding:1px 3px;border-radius:4px;flex-shrink:0;transition:all .15s}
+.ci:hover .ci-x{opacity:1}
+.ci-x:hover{color:var(--rust);background:rgba(181,98,42,.1)}
+.sb-ft{padding:9px 11px;border-top:1px solid var(--bdr);flex-shrink:0}
+.sb-info{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);text-align:center}
+.no-chats{text-align:center;padding:26px 14px;color:var(--faint);font-size:.76rem;line-height:1.6}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--bdr);background:rgba(245,240,232,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);flex-shrink:0;z-index:10;gap:10px}
+.h-l{display:flex;align-items:center;gap:8px}
+.tog{width:30px;height:30px;background:none;border:1px solid var(--bdr);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mid);transition:all .2s;flex-shrink:0}
+.tog:hover{background:var(--surf);color:var(--char)}
+.logo{width:30px;height:30px;background:var(--char);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand{font-family:'Fraunces',serif;font-weight:300;font-size:1.05rem;letter-spacing:-.02em;color:var(--char)}
+.badge{font-family:'DM Mono',monospace;font-size:.61rem;color:var(--faint);background:var(--surf);border:1px solid var(--bdr);padding:2px 7px;border-radius:100px;white-space:nowrap;transition:all .3s}
+.badge.img-mode{background:rgba(181,98,42,.12);border-color:var(--rust);color:var(--rust)}
+.h-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--clay);flex-shrink:0;transition:background .3s}
+.dot.on{background:#5C9E6B;box-shadow:0 0 0 3px rgba(92,158,107,.2)}
+.dot.spin{background:var(--rust);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.key-in{font-family:'DM Mono',monospace;font-size:.67rem;background:var(--surf);border:1px solid var(--bdr);border-radius:9px;padding:5px 10px;color:var(--char);width:188px;outline:none;transition:border-color .2s,box-shadow .2s}
+.key-in:focus{border-color:var(--clay);box-shadow:0 0 0 3px var(--glow)}
+.key-in::placeholder{color:var(--faint)}
+
+/* ── MESSAGES ── */
+#msgs{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;scroll-behavior:smooth}
+#msgs::-webkit-scrollbar{width:4px}
+#msgs::-webkit-scrollbar-thumb{background:var(--sand);border-radius:4px}
+
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 20px;gap:12px;animation:fadeUp .6s ease both}
+.w-orb{width:62px;height:62px;background:linear-gradient(135deg,var(--clay) 0%,var(--rust) 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;box-shadow:0 8px 22px rgba(181,98,42,.22)}
+.welcome h1{font-family:'Fraunces',serif;font-weight:300;font-size:1.75rem;letter-spacing:-.03em;line-height:1.2}
+.welcome p{font-size:.85rem;color:var(--mid);max-width:310px;line-height:1.6}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
+.chip{background:var(--surf);border:1px solid var(--bdr);border-radius:100px;padding:5px 12px;font-size:.75rem;color:var(--mid);cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif}
+.chip:hover{background:var(--sand);color:var(--char);border-color:var(--clay);transform:translateY(-1px)}
+
+.row{display:flex;gap:10px;animation:fadeUp .25s ease both;margin-bottom:14px}
+.row.u{flex-direction:row-reverse}
+.av{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:.6rem;font-family:'DM Mono',monospace}
+.av.ai{background:var(--char)}
+.av.u{background:var(--rust);color:white}
+.bub{max-width:75%;padding:11px 15px;border-radius:20px;font-size:.875rem;line-height:1.72}
+.bub.ai{background:var(--warm);border:1px solid var(--bdr);border-bottom-left-radius:5px;color:var(--char)}
+.bub.u{background:var(--char);color:var(--cream);border-bottom-right-radius:5px}
+
+/* Generated image */
+.gen-wrap{margin:4px 0 5px}
+.gen-wrap img{max-width:100%;border-radius:12px;display:block;border:1px solid var(--bdr);cursor:zoom-in;transition:transform .2s,box-shadow .2s}
+.gen-wrap img:hover{transform:scale(1.01);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.gen-cap{font-size:.71rem;color:var(--faint);margin-top:5px;font-family:'DM Mono',monospace;font-style:italic}
+.dl-btn{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:5px 10px;font-size:.72rem;color:var(--mid);cursor:pointer;font-family:'Instrument Sans',sans-serif;text-decoration:none;transition:all .2s}
+.dl-btn:hover{background:var(--sand);color:var(--char);border-color:var(--clay)}
+
+/* Attached file previews in user bubble */
+.ap{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:7px 10px;margin-bottom:7px;font-size:.75rem;color:rgba(245,240,232,.8)}
+.ap.img{flex-direction:column;align-items:flex-start;padding:0;background:none;border:none;margin-bottom:9px}
+.ap.img img{max-width:220px;max-height:170px;border-radius:10px;object-fit:cover;border:1px solid var(--bdr)}
+
+/* Markdown */
+.bub.ai strong{color:var(--rust);font-weight:600}
+.bub.ai em{font-style:italic;color:var(--mid)}
+.bub.ai code{font-family:'DM Mono',monospace;font-size:.79em;background:var(--surf);padding:1px 5px;border-radius:5px;border:1px solid var(--bdr)}
+.bub.ai pre{background:var(--char);color:var(--cream);border-radius:11px;padding:12px 14px;margin:9px 0;overflow-x:auto;font-family:'DM Mono',monospace;font-size:.78em;line-height:1.6}
+.bub.ai pre code{background:none;border:none;padding:0;color:inherit;font-size:inherit}
+.bub.ai ul,.bub.ai ol{padding-left:1.3em;margin:6px 0}
+.bub.ai li{margin:3px 0}
+.bub.ai p{margin:6px 0}
+.bub.ai p:first-child{margin-top:0}
+.bub.ai p:last-child{margin-bottom:0}
+.bub.ai h1,.bub.ai h2,.bub.ai h3{font-family:'Fraunces',serif;font-weight:300;margin:10px 0 4px}
+.bub.ai h1{font-size:1.18em}.bub.ai h2{font-size:1.03em}.bub.ai h3{font-size:.93em}
+.bub.ai blockquote{border-left:3px solid var(--clay);padding-left:10px;margin:6px 0;color:var(--mid);font-style:italic}
+.bub.ai a{color:var(--rust);text-decoration:underline;text-underline-offset:2px}
+.bub.ai table{border-collapse:collapse;width:100%;margin:9px 0;font-size:.83em}
+.bub.ai th,.bub.ai td{border:1px solid var(--bdr);padding:5px 9px;text-align:left}
+.bub.ai th{background:var(--surf);font-weight:600}
+.bub.ai hr{border:none;border-top:1px solid var(--bdr);margin:10px 0}
+.bub.ai del{text-decoration:line-through;opacity:.65}
+
+/* Image skeleton */
+.skel{width:280px;height:196px;background:linear-gradient(90deg,var(--surf) 25%,var(--sand) 50%,var(--surf) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-family:'DM Mono',monospace;color:var(--faint)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Typing */
+.typing{display:flex;align-items:center;gap:4px;padding:12px 16px;background:var(--warm);border:1px solid var(--bdr);border-radius:20px;border-bottom-left-radius:5px;width:fit-content}
+.d{width:6px;height:6px;background:var(--clay);border-radius:50%;animation:bop 1.2s ease infinite}
+.d:nth-child(2){animation-delay:.2s}.d:nth-child(3){animation-delay:.4s}
+@keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* ── INPUT ── */
+.inp-area{padding:10px 20px 16px;border-top:1px solid var(--bdr);background:rgba(245,240,232,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);flex-shrink:0}
+#strip{display:none;flex-wrap:wrap;gap:6px;margin-bottom:7px}
+#strip.show{display:flex}
+.ach{display:flex;align-items:center;gap:5px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:4px 8px;font-size:.72rem;color:var(--mid);max-width:160px}
+.ach span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ach img{width:24px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.ach-x{background:none;border:none;color:var(--faint);cursor:pointer;font-size:.88rem;padding:0 1px;line-height:1;flex-shrink:0}
+.ach-x:hover{color:var(--rust)}
+.inp-wrap{display:flex;align-items:flex-end;gap:7px;background:var(--warm);border:1px solid var(--bdr);border-radius:16px;padding:7px 7px 7px 13px;transition:border-color .2s,box-shadow .2s}
+.inp-wrap:focus-within{border-color:var(--clay);box-shadow:0 0 0 3px var(--glow)}
+#tin{flex:1;background:none;border:none;outline:none;font-family:'Instrument Sans',sans-serif;font-size:.875rem;color:var(--char);resize:none;max-height:144px;line-height:1.6;min-height:24px}
+#tin::placeholder{color:var(--faint)}
+.icn{width:31px;height:31px;background:none;border:1px solid var(--bdr);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--mid);flex-shrink:0}
+.icn:hover{background:var(--surf);color:var(--char);border-color:var(--clay)}
+.icn.on{background:var(--rust);color:white;border-color:var(--rust)}
+.snd{width:31px;height:31px;background:var(--char);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0}
+.snd:hover:not(:disabled){background:var(--rust);transform:scale(1.05)}
+.snd:disabled{opacity:.33;cursor:not-allowed}
+.inp-ft{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 2px}
+.hint{font-size:.67rem;color:var(--faint);font-family:'DM Mono',monospace}
+.img-hint{font-size:.67rem;color:var(--rust);font-family:'DM Mono',monospace;display:none}
+.img-hint.show{display:block}
+.clr{font-size:.67rem;color:var(--faint);background:none;border:none;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:color .2s}
+.clr:hover{color:var(--rust)}
+
+/* Lightbox */
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.show{display:flex}
+#lb img{max-width:92vw;max-height:92vh;border-radius:14px;object-fit:contain}
+
+/* Toast */
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:10px;font-size:.77rem;z-index:9998;animation:sup .3s ease,fout .3s ease 3.7s both;max-width:320px;text-align:center;line-height:1.4}
+.toast.err{background:#3D1A0E;color:#F5D5C0}
+.toast.ok{background:#0E3D1A;color:#C0F5D0}
+
+#fin{display:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sup{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes fout{to{opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div id="lb" onclick="closeLb()"><img id="lbImg" src="" alt=""/></div>
+
+<div id="shell">
+  <!-- Mobile backdrop — clicking closes sidebar -->
+  <div id="backdrop" onclick="closeSb()"></div>
+
+  <!-- ── SIDEBAR ── -->
+  <aside id="sb">
+    <div class="sb-hd">
+      <span class="sb-ttl">Conversations</span>
+      <button class="new-btn" onclick="newChat()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        New chat
+      </button>
+    </div>
+    <div class="sb-srch"><input id="srch" placeholder="Search chats…" oninput="renderList()"/></div>
+    <div id="chatList"></div>
+    <div class="sb-ft"><div class="sb-info" id="sbInfo">Chats saved locally</div></div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div id="main">
+    <header>
+      <div class="h-l">
+        <!-- Toggle button — single source of truth -->
+        <button class="tog" id="togBtn" onclick="toggleSb()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+            <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12" stroke="#F5F0E8" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M16 8L21 3M21 3H16M21 3V8" stroke="#C4A882" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="2.5" fill="#C4A882"/>
+          </svg>
+        </div>
+        <span class="brand">Claude</span>
+        <span class="badge" id="badge">chat · llama-3.3-70b</span>
+      </div>
+      <div class="h-r">
+        <div class="dot" id="dot"></div>
+        <input type="password" class="key-in" id="key" placeholder="Groq API key…" autocomplete="off"/>
+      </div>
+    </header>
+
+    <div id="msgs"></div>
+
+    <div class="inp-area">
+      <div id="strip"></div>
+      <div class="inp-wrap">
+        <textarea id="tin" placeholder="Message Claude…" rows="1"></textarea>
+        <!-- Image gen mode toggle -->
+        <button class="icn" id="imgBtn" onclick="toggleImg()" title="Toggle image generation">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+            <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <!-- File attach -->
+        <button class="icn" onclick="document.getElementById('fin').click()" title="Attach file or image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="snd" id="snd" onclick="send()" disabled>
+          <svg viewBox="0 0 24 24" fill="none" width="13" height="13"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="inp-ft">
+        <span class="hint" id="ht">↵ send · shift+↵ newline · 📎 attach files</span>
+        <span class="img-hint" id="iht">🎨 image generation active — describe your image</span>
+        <button class="clr" onclick="clearChat()">Clear chat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fin" accept="image/*,.txt,.md,.csv,.json,.js,.ts,.jsx,.tsx,.py,.html,.css,.xml,.yaml,.yml" multiple onchange="handleFiles(event)"/>
+
+<script>
+// ── CONFIG ──
+const CHAT_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const IMG_URL  = 'https://api.groq.com/openai/v1/images/generations';
+const CHAT_M   = 'llama-3.3-70b-versatile';
+const IMG_M    = 'black-forest-labs/FLUX.1-schnell'; // Groq image gen model
+const SK       = 'cloneV4_chats';
+const AK       = 'cloneV4_active';
+
+const SYS = `You are Claude, a helpful, harmless, and honest AI assistant made by Anthropic. You are warm, thoughtful, and give clear nuanced responses. Adapt your tone — casual when casual, precise when technical. Acknowledge uncertainty rather than fabricating. Use markdown formatting where it helps.`;
+
+// ── STATE ──
+let chats    = {};
+let activeId = null;
+let busy     = false;
+let pending  = [];   // pending file attachments
+let imgMode  = false;
+let sbOpen   = true; // sidebar open state (desktop) / used as toggle tracker (mobile)
+
+// ── DOM shortcuts ──
+const
